@@ -21,20 +21,33 @@ struct Priority_queue{
 int initialize(Priority_queue& queue) {
     queue.size = 0;
     queue.capacity = 2;
-    queue.ITEM = (item*)malloc(sizeof(item) * queue.capacity);
-    if (queue.ITEM == NULL) {
-        return ERROR; 
+    try {
+        queue.ITEM =new item[queue.capacity];
+    }catch(const std::bad_alloc& e){
+        return ERROR;
     }
+    
     return CORRECT;
 }
 
 //расширение очереди до предыдущего размера*2
 void resize(Priority_queue& queue) {
-    queue.capacity *= 2;
-    queue.ITEM = (item*)realloc(queue.ITEM, sizeof(item) * queue.capacity);
-    if (queue.ITEM == NULL) {
+    int newCapacity=queue.capacity*2;
+    item* newItem=nullptr;
+    try {
+        newItem = new item[newCapacity];
+    } catch (const std::bad_alloc& e) {
         return;
     }
+
+    for (int i = 0; i < queue.size; ++i) {
+        newItem[i] = queue.ITEM[i];
+    }
+
+    delete[] queue.ITEM;
+    queue.ITEM = newItem;
+    queue.capacity = newCapacity;
+
 }
 //добавление значения типа char * (строка в стиле C) по ключу типа int в приоритетную очередь, с копированием строки в контекст структуры
 void enqueue(Priority_queue&queue, item element) {
