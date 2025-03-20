@@ -63,7 +63,7 @@ void enqueue(Priority_queue&queue, item element) {
 
 //поиск значения по наиболее приоритетному ключу
 char* peek(Priority_queue& queue) {
-    if (queue.size == 0) return NULL;
+    if (queue.size == 0) return nullptr;
     int highest_priority_index = 0;
 
     for (int i = 1; i < queue.size; ++i) {
@@ -93,7 +93,7 @@ void dequeue(Priority_queue& queue) {
         }
     }
 
-    free(queue.ITEM[highest_priority_index].value);
+    delete queue.ITEM[highest_priority_index].value;
 
     for (int i = highest_priority_index; i < queue.size - 1; ++i) {
         queue.ITEM[i] = queue.ITEM[i + 1];
@@ -103,9 +103,9 @@ void dequeue(Priority_queue& queue) {
 
 void cleanup(Priority_queue& queue) {
     for (int i = 0; i < queue.size; i++) {
-        free(queue.ITEM[i].value);
+        delete queue.ITEM[i].value;
     }
-    free(queue.ITEM);
+    delete queue.ITEM;
 }
 bool check_if_priority_queue(Priority_queue&queue){
     if (queue.size==0){
